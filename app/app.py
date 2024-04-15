@@ -3,11 +3,17 @@ from faicons import icon_svg
 
 from shiny import reactive
 from shiny.express import input, render, ui
-import palmerpenguins 
+import palmerpenguins
+import plotly.express as px
+from shinywidgets import render_plotly
+import shinyswatch
 
+shinyswatch.theme.sketchy()
+
+# saving the data locally
 df = palmerpenguins.load_penguins()
 
-ui.page_opts(title="Penguins dashboard", fillable=True)
+ui.page_opts(title="Shellenberger Modlue 07 Penguins dashboard", fillable=True)
 
 
 with ui.sidebar(title="Filter controls"):
@@ -78,13 +84,13 @@ with ui.layout_columns():
     with ui.card(full_screen=True):
         ui.card_header("Bill length and depth")
 
-        @render.plot
+        @render_plotly
         def length_depth():
-            return sns.scatterplot(
-                data=filtered_df(),
+            return px.scatter(
+                filtered_df(),
                 x="bill_length_mm",
                 y="bill_depth_mm",
-                hue="species",
+                color="species",
             )
 
     with ui.card(full_screen=True):
