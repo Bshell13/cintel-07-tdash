@@ -11,7 +11,9 @@ ui.page_opts(title="Penguins dashboard", fillable=True)
 
 
 with ui.sidebar(title="Filter controls"):
+    # Slider used to control 'mass' variable
     ui.input_slider("mass", "Mass", 2000, 6000, 6000)
+    # checkboxes to control 'species' variable
     ui.input_checkbox_group(
         "species",
         "Species",
@@ -49,9 +51,10 @@ with ui.sidebar(title="Filter controls"):
 
 
 with ui.layout_column_wrap(fill=False):
+    # Shows a colored box for numerical statistics.
     with ui.value_box(showcase=icon_svg("earlybirds")):
         "Number of penguins"
-
+        # Uses the filtered data based on the variables
         @render.text
         def count():
             return filtered_df().shape[0]
@@ -61,14 +64,14 @@ with ui.layout_column_wrap(fill=False):
 
         @render.text
         def bill_length():
-            return f"{filtered_df()['bill_length_mm'].mean():.1f} mm"
+            return f"{filtered_df()['bill_length_mm'].mean():.1f} mm" # Rounds to 1 decimal place ':.1f'
 
     with ui.value_box(showcase=icon_svg("ruler-vertical")):
         "Average bill depth"
 
         @render.text
         def bill_depth():
-            return f"{filtered_df()['bill_depth_mm'].mean():.1f} mm"
+            return f"{filtered_df()['bill_depth_mm'].mean():.1f} mm" # Rounds to 1 decimal place ':.1f'
 
 
 with ui.layout_columns():
@@ -85,8 +88,8 @@ with ui.layout_columns():
             )
 
     with ui.card(full_screen=True):
-        ui.card_header("Penguin da")
-
+        ui.card_header("Penguin data")
+        # Shows a Data Grid of the filtered data.
         @render.data_frame
         def summary_statistics():
             cols = [
@@ -101,7 +104,7 @@ with ui.layout_columns():
 
 #ui.include_css(app_dir / "styles.css")
 
-
+# filtering the data by species and body mass from the variables in the ui.sidebar
 @reactive.calc
 def filtered_df():
     filt_df = df[df["species"].isin(input.species())]
